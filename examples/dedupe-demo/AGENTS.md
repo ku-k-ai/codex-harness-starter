@@ -1,6 +1,7 @@
 # デモの作業範囲
 
 このディレクトリでデモを解く場合は .harness/TASK.md を読む。
+ネイティブWindowsのPowerShellを前提とし、このディレクトリから `uv run python` を使う。スターターのuv環境が使われる。
 修正対象は src/merge.py。tests/ と .harness/checks.json は合格基準として固定する。
 変更前に検証し、修正後に同じ検証を実行する。テストを書き換えて合格させない。
 実験結果と未達条件を .harness/STATE.md と .harness/EXPERIMENTS.md に短く残す。

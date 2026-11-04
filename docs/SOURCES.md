@@ -9,6 +9,7 @@
 | [Hooks — ChatGPT Learn](https://learn.chatgpt.com/docs/hooks) | Stopイベントで `decision: "block"` と `reason` により継続を要求できる公式仕様を確認。ただしこのスターターはStopフックを導入しない。 |
 | [Custom instructions with AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md) | グローバル・プロジェクト・配下の指示を踏まえた運用。雛形は既存AGENTSを自動で上書きせず、今回必要な補助断片として配置する。 |
 | [Rethinking skills and prompts for GPT-6 Astra](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra) | 過密な手順や常時適用する指示を見直し、適用範囲の明確な短い指示を使う方針。全GPTモデルへ同じ効果を保証するものではない。 |
+| [uv: Working on projects](https://docs.astral.sh/uv/guides/projects/) / [Running commands](https://docs.astral.sh/uv/concepts/projects/run/) | 2026-11-05追記。`uv sync` による準備と `uv run python` によるプロジェクト環境内での実行。利用者のネイティブWindows・uv環境に合わせた。 |
 
 ## 先行メモから更新した点
 

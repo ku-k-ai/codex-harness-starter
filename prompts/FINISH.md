@@ -3,11 +3,12 @@
 ```text
 .harness/TASK.mdの完了条件を、現在の最終差分と実際の証拠で照合して仕上げてください。
 既存の正規のAGENTS.mdと今回の許可範囲を守ってください。
+環境はネイティブWindows・PowerShell・uvです。以下は対象プロジェクトのルートで実行してください。
 
 - 最後の検証後にコード・データ・設定を変えていないか確認する。
 - 変わった部分に関係する確認が不足していれば、必要な範囲を再実行する。十分に検証済みの項目を理由なく繰り返さない。
 - 次のstatusで結果を確認し、実行した対象と証拠を結びつける。
-  python "<STARTER_PATH>/tools/harness.py" status .
+  uv run python "<STARTER_PATH>/tools/harness.py" status .
 - 自動チェックの成功と、TASKの全要件達成を分けて判断する。手動確認が必要で未確認なら、その事実を明記する。
 - STATE.mdにdone / blocked / budgetの適切な終了状態、確認済みの版、未達条件、再開条件を記録する。
 

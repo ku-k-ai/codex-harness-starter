@@ -2,10 +2,10 @@
 
 **会社・自宅のCodexで「目標 → 実装 → 検証 → 判断」を試すための、日本語テンプレートと小さな検証ツール。**
 
-案件の目的と合格条件を固定し、Codexに実装方法を考えさせます。最初から大きな自律システムを作らず、目標の継続は対応版Codexの `/goal` を使います。
+前提は **ネイティブWindows・PowerShell・uv・Codex**。案件の目的と合格条件を固定し、Codexに実装方法を考えさせます。目標の継続は対応版Codexの `/goal` を使います。
 
-- Python **3.9以降・標準ライブラリのみ**。pip install、APIキー、追加サービスは不要。
-- WindowsのPowerShellでも使える。`python` が使えなければ `py -3` に置き換える。
+- Python **3.9以降・標準ライブラリのみ**。環境はuvで管理し、Pythonの実行は `uv run python` に統一する。
+- `pyproject.toml` と `uv.lock` を同梱。`uv sync` で準備でき、仮想環境の手動activateは不要。
 - 既存のAGENTS.mdやCodex設定を勝手に上書きしない。
 - 検証したソースと設定の指紋を保存し、変更後の古い結果を `stale` と表示する。
 - チェック成功と、業務要件の完了は区別する。
@@ -17,10 +17,11 @@
 ```powershell
 git clone https://github.com/ku-k-ai/codex-harness-starter.git
 cd codex-harness-starter
-python tools/harness.py run examples/dedupe-demo --label baseline
+uv sync
+uv run python tools/harness.py run examples/dedupe-demo --label baseline
 ```
 
-Pythonが `py` から使える環境では、最後の行を `py -3 tools/harness.py run examples/dedupe-demo --label baseline` に置き換えます。非公開リポジトリの場合は、通常のGitHub認証が必要です。
+取得済みなら、このリポジトリで `git pull` → `uv sync` を実行します。
 
 次に、デモのディレクトリでCodexを起動します。
 
@@ -32,7 +33,7 @@ codex
 Codexに次の1行を渡してください。
 
 ```text
-/goal .harness/TASK.md を読み、固定された受入条件を満たすように src/merge.py を修正してください。変更前後を ../../tools/harness.py で検証し、最終版の結果と変更理由を示してください。tests/ と合格基準は変更しないでください。
+/goal .harness/TASK.md を読み、受入条件を満たすように src/merge.py を修正してください。Pythonは uv run python で実行し、TASKにあるコマンドで変更前後を検証してください。tests/ と合格基準は変更せず、最終結果と変更理由を短く示してください。
 ```
 
 `/goal` が使えない版では、先頭の `/goal` を除いた同じ依頼を使います。この場合、標準の自動継続が有効になるわけではありません。途中終了時は [再開用の指示](prompts/RESUME.md) を使います。
@@ -40,8 +41,8 @@ Codexに次の1行を渡してください。
 完了後、デモのディレクトリで確認します。
 
 ```powershell
-python ../../tools/harness.py run . --label candidate
-python ../../tools/harness.py status .
+uv run python ../../tools/harness.py run . --label candidate
+uv run python ../../tools/harness.py status .
 ```
 
 受入テスト9件の成功に加え、TASKにある計算量の説明と記録も確認します。`PASS` だけで業務完了とはしません。
@@ -50,13 +51,14 @@ python ../../tools/harness.py status .
 
 ### 1. 対象プロジェクトに案件用ファイルを作る
 
-スターターのルートから、作業したい既存プロジェクトを指定します。
+**作業したいプロジェクトのルートへ移動してから**実行します。以下はスターターを `C:\tools\codex-harness-starter` に置いた例です。
 
 ```powershell
-python tools/harness.py init "C:\work\my-project"
+cd "C:\work\my-project"
+uv run python "C:\tools\codex-harness-starter\tools\harness.py" init .
 ```
 
-`C:\work\my-project` は自分のプロジェクトのパスに置き換えます。作られるのは次のファイルです。
+2つのパスを実際の場所に置き換えます。**対象側のuv環境を使うため、実案件のコマンドは対象プロジェクト内で実行します。** `uv run python` の `python` は省略しません。作られるのは次のファイルです。
 
 | 対象プロジェクト内のファイル | 役割 |
 | --- | --- |
@@ -90,9 +92,10 @@ python tools/harness.py init "C:\work\my-project"
 }
 ```
 
-- `argv` はコマンドと引数の配列。`{python}` は、harness.pyを動かしているPythonに置き換わります。
+- `argv` はコマンドと引数の配列。`{python}` は、`uv run python` で選ばれた対象プロジェクトのPythonに置き換わります。
 - 実行場所は対象プロジェクトのルート。シェル文字列は実行しません。
 - `fingerprint_paths` は、結果に関係するソース・評価データ・テスト・仕様を列挙します。対象外のファイルの変更までは検出できません。
+- 依存関係が結果に影響する案件では、存在する `pyproject.toml` と `uv.lock` も `fingerprint_paths` に含めます。
 - コマンドは現在の利用者の権限で動きます。このツール自体に隔離機能はありません。既存の会社・Codexの権限設定を維持します。
 - Node等のコマンドは、そのプロジェクトで通常使っているものを指定します。Windowsの `.cmd` 呼び出し等が必要なら明示した実行ファイルと引数を設定してください。
 
@@ -101,9 +104,10 @@ python tools/harness.py init "C:\work\my-project"
 この場合は [RUN.md](prompts/RUN.md) の `/goal` を使います。STARTで既に実装まで進んでいるなら、RUNを重ねて送る必要はありません。検証コマンドのharness.pyの場所は、TASKに実際の絶対パスで記入しておくと移動しても迷いません。
 
 ```powershell
-python "C:\tools\codex-harness-starter\tools\harness.py" run "C:\work\my-project" --label baseline
-python "C:\tools\codex-harness-starter\tools\harness.py" run "C:\work\my-project" --label candidate
-python "C:\tools\codex-harness-starter\tools\harness.py" status "C:\work\my-project"
+cd "C:\work\my-project"
+uv run python "C:\tools\codex-harness-starter\tools\harness.py" run . --label baseline
+uv run python "C:\tools\codex-harness-starter\tools\harness.py" run . --label candidate
+uv run python "C:\tools\codex-harness-starter\tools\harness.py" status .
 ```
 
 これは例のパスです。クローンした場所と対象プロジェクトの場所に置き換えます。
@@ -142,10 +146,10 @@ python "C:\tools\codex-harness-starter\tools\harness.py" status "C:\work\my-proj
 ## スターター自体の検証
 
 ```powershell
-python -m unittest discover -s tests -v
+uv run --locked python -m unittest discover -s tests -v
 ```
 
-これはスターターを開発・変更する場合の検証です。デモの受入テストは初期状態で失敗します。GitHub ActionsにはWindowsとUbuntu、Python 3.9と3.12の検証定義を用意しています。実際の実行状況はリポジトリのActionsで確認してください。
+これはスターターを開発・変更する場合の検証です。デモの受入テストは初期状態で失敗します。GitHub Actionsでもuvを使い、WindowsとUbuntu、Python 3.9と3.12で検証します。実際の実行状況はリポジトリのActionsで確認してください。
 
 ## 設計の根拠と範囲
 

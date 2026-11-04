@@ -4,8 +4,8 @@
 このプロジェクトの作業を再開してください。
 既存の正規のAGENTS.md、.harness/TASK.md、.harness/STATE.mdと、EXPERIMENTS.mdの関連する直近記録を確認してください。
 
-まず次を使って最新のチェック結果を確認してください。
-python "<STARTER_PATH>/tools/harness.py" status .
+ネイティブWindowsのPowerShellで、対象プロジェクトのルートから次を使って最新のチェック結果を確認してください。
+uv run python "<STARTER_PATH>/tools/harness.py" status .
 実際のブランチ・コミット・未コミット差分、検証対象、データや設定が記録と一致するかを照合してください。
 記録が古い場合は、実際の状態を確認してSTATE.mdを更新してください。既に完了した変更を最初からやり直さないでください。
 

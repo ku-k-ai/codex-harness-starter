@@ -21,16 +21,15 @@ src/merge.py の merge_records(existing, incoming) を修正する。同じデ�
 
 ## 実行方法
 
-このディレクトリを作業ディレクトリとする。
+ネイティブWindowsのPowerShellで、このディレクトリを作業ディレクトリとする。スターターのルートで `uv sync` を実行しておく。
 
-```text
-python ../../tools/harness.py run . --label baseline
-python ../../tools/harness.py run . --label candidate
-python ../../tools/harness.py status .
+```powershell
+uv run python ../../tools/harness.py run . --label baseline
+uv run python ../../tools/harness.py run . --label candidate
+uv run python ../../tools/harness.py status .
 ```
 
-直接確認する場合は `python -m unittest discover -s tests -v`。
-Windowsでは、python が使えなければ `py -3` に置き換える。
+直接確認する場合は `uv run python -m unittest discover -s tests -v`。仮想環境の手動activateは不要。
 
 ## 作業範囲・予算
 

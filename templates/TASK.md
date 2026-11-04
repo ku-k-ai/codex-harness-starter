@@ -43,10 +43,13 @@
 
 検証設定は `.harness/checks.json`。設定内容を読み、実行対象と合格基準が一致することを確認する。
 
-```text
-python "<STARTER_PATH>/tools/harness.py" run "<TARGET_PATH>" --label baseline
-python "<STARTER_PATH>/tools/harness.py" run "<TARGET_PATH>" --label candidate
-python "<STARTER_PATH>/tools/harness.py" status "<TARGET_PATH>"
+ネイティブWindowsのPowerShellで、対象プロジェクトのuv環境を使う。
+
+```powershell
+cd "<TARGET_PATH>"
+uv run python "<STARTER_PATH>/tools/harness.py" run . --label baseline
+uv run python "<STARTER_PATH>/tools/harness.py" run . --label candidate
+uv run python "<STARTER_PATH>/tools/harness.py" status .
 ```
 
 `<STARTER_PATH>` はこのスターターの絶対パス、`<TARGET_PATH>` は対象プロジェクトの絶対パスへ置き換える。

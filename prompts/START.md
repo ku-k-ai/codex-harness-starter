@@ -11,9 +11,10 @@
 スターターの場所: <STARTER_PATH>
 対象: 現在のプロジェクト
 
+環境はネイティブWindows・PowerShell・uvです。対象プロジェクトのルートで作業し、Pythonは uv run python で実行してください。既存のuv設定とPythonバージョンに従ってください。
 既存の正規のAGENTS.md、関係する規約、今回の依頼を確認して作業を始めてください。
 まず必要なら次を実行してください。
-python "<STARTER_PATH>/tools/harness.py" init .
+uv run python "<STARTER_PATH>/tools/harness.py" init .
 
 .harness/TASK.mdを今回の目的・完了条件・検証方法・変更範囲・予算に合わせて具体化してください。
 完了条件は自動判定と手動判定を区別し、関連する仕様・評価データ・回帰ケースを固定してください。

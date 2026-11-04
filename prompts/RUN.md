@@ -5,10 +5,11 @@
 ```text
 /goal .harness/TASK.mdの目的を、同ファイルの完了条件と証拠で確認できる状態まで達成してください。
 既存の正規のAGENTS.mdと許可範囲を守り、STATE.mdを実際のコード・差分・最新結果と照合して続行してください。
+ネイティブWindowsのPowerShellで、対象プロジェクトのルートからuvを使って実行してください。
 仮説を検証し、必要な候補確認は次で実行してください。
-python "<STARTER_PATH>/tools/harness.py" run . --label candidate
+uv run python "<STARTER_PATH>/tools/harness.py" run . --label candidate
 結果の参照は次で確認できます。
-python "<STARTER_PATH>/tools/harness.py" status .
+uv run python "<STARTER_PATH>/tools/harness.py" status .
 
 記録は仮説→試したこと→証拠→採否→次の順で短く残してください。
 TASKの停滞条件に達した場合は、確認済みの事実と制約を保持し、既存案への思い込みを外して別案を比較してください。
