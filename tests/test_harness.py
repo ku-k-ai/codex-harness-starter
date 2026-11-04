@@ -244,7 +244,11 @@ class HarnessTests(unittest.TestCase):
         state = self.output(self.invoke("status"), 1)
         self.assertEqual(state["status"], "incomplete")
         self.assertTrue(state["stale"])
-        self.assertEqual(Path(state["report"]), incomplete / "report.json")
+        # Windowsの一時フォルダーの短縮名を解決する。レポート自体は未作成。
+        self.assertEqual(
+            Path(state["report"]).resolve(strict=False),
+            (incomplete / "report.json").resolve(strict=False),
+        )
 
     def test_corrupt_latest_report_is_an_error(self):
         self.save_config(self.config())
