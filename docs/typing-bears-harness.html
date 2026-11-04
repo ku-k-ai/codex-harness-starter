@@ -1,0 +1,882 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Typing Bearsのハーネス</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+1+Code:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: a single column that reads like a system manual — map, replay, prep loop, then what is still unknown.
+   Color carries the actor: amber = the person, blue = the competing agent, teal = the watchers (hooks, auditor, scripts). */
+:root {
+  --bg: #F2F4F7;
+  --surface: #FFFFFF;
+  --surface-2: #F6F8FA;
+  --ink: #17202B;
+  --muted: #5B6676;
+  --line: #D7DEE7;
+  --ai: #2B57CF; --ai-soft: #DFE7FB; --ai-ink: #1E43A6; --on-ai: #FFFFFF;
+  --human: #D4861A; --human-soft: #FBEBD2; --human-ink: #8A5308;
+  --sys: #0E7F80; --sys-soft: #D6F0EF; --sys-ink: #0A5E5F;
+  --other: #A3ADBA; --ng: #C4473B; --ok: #2A8A57;
+  --font-display: "Dela Gothic One", "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  --font-mono: "M PLUS 1 Code", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F141B; --surface: #171E28; --surface-2: #121922; --ink: #E6EBF2; --muted: #9AA5B4; --line: #2A3443;
+    --ai: #7D9BFF; --ai-soft: #1D2947; --ai-ink: #AFC2FF; --on-ai: #0C1222;
+    --human: #F0AC4C; --human-soft: #3A2B15; --human-ink: #F7C985;
+    --sys: #4FC7C4; --sys-soft: #14302F; --sys-ink: #8FE0DD;
+    --other: #55606F; --ng: #F07B6F; --ok: #5BC48B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F141B; --surface: #171E28; --surface-2: #121922; --ink: #E6EBF2; --muted: #9AA5B4; --line: #2A3443;
+  --ai: #7D9BFF; --ai-soft: #1D2947; --ai-ink: #AFC2FF; --on-ai: #0C1222;
+  --human: #F0AC4C; --human-soft: #3A2B15; --human-ink: #F7C985;
+  --sys: #4FC7C4; --sys-soft: #14302F; --sys-ink: #8FE0DD;
+  --other: #55606F; --ng: #F07B6F; --ok: #5BC48B;
+  color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.85; }
+.page {
+  max-width: 1000px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+  display: grid; gap: 72px;
+}
+h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; word-break: auto-phrase; }
+h1 { font-family: var(--font-display); font-size: clamp(27px, 4.8vw, 42px); line-height: 1.4; }
+h2 { font-family: var(--font-display); font-size: clamp(22px, 3.4vw, 29px); line-height: 1.45; }
+h3 { font-weight: 700; font-size: 17px; line-height: 1.6; }
+p { margin: 0; max-width: 40em; }
+a { color: var(--ai-ink); text-underline-offset: 3px; }
+code { font-family: var(--font-mono); font-size: .9em; background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 0 .35em; }
+:focus-visible { outline: 2px solid var(--ai); outline-offset: 3px; border-radius: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: .08em; color: var(--muted); margin: 0; }
+.section { display: grid; gap: 18px; }
+.section-head { display: grid; gap: 8px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; min-width: 0; }
+.btn { font: inherit; font-size: 14px; border: 1.5px solid var(--ai); color: var(--ai-ink); background: transparent; border-radius: 999px; padding: 5px 16px; cursor: pointer; transition: background .2s, color .2s; }
+.btn:hover { background: var(--ai-soft); }
+.btn[aria-pressed="true"] { background: var(--ai); color: var(--on-ai); }
+
+/* hero */
+.hero { display: grid; gap: 18px; }
+.lead { font-size: 17px; }
+.status { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; font-size: 14px; color: var(--muted); }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; list-style: none; margin: 0; padding: 0; font-size: 13px; color: var(--muted); }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+.sw.human { background: var(--human); }
+.sw.ai { background: var(--ai); }
+.sw.sys { background: var(--sys); }
+.sw.unknown { border: 1.5px dashed var(--muted); }
+.facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.facts li { background: var(--surface); border-radius: 12px; padding: 12px 14px; display: grid; gap: 2px; border: 1px solid var(--line); }
+.facts b { font-family: var(--font-display); font-weight: 400; font-size: 22px; font-variant-numeric: tabular-nums; }
+.facts li:first-child b { color: var(--human-ink); }
+.facts span { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+
+/* map */
+.map-wrap { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.map { display: grid; gap: 8px; }
+.map-row { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+.map-row > .part { flex: 1 1 150px; }
+.map-row.tight > .part { flex-basis: 104px; }
+.link-r { align-self: center; color: var(--muted); font-size: 18px; }
+.link-down { justify-self: center; color: var(--muted); font-size: 13px; line-height: 1.4; text-align: center; }
+.core { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: 8px; }
+.col { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.col-title { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); letter-spacing: .04em; }
+.group-title { font-family: var(--font-mono); font-size: 11.5px; color: var(--sys-ink); letter-spacing: .04em; }
+.part {
+  font: inherit; text-align: left; cursor: pointer; color: var(--ink);
+  border-radius: 12px; padding: 9px 12px; border: 1.5px solid var(--line); background: var(--surface);
+  display: grid; gap: 1px; position: relative; min-width: 0; align-content: start;
+  transition: transform .2s, box-shadow .2s;
+  --lit: var(--ai-soft);
+}
+.part b { font-size: 14px; line-height: 1.5; }
+.part span { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.part[data-kind="human"] { border-color: var(--human); background: var(--human-soft); --lit: var(--human); }
+.part[data-kind="human"] b { color: var(--human-ink); }
+.part[data-kind="sys"] { border-color: var(--sys); background: var(--sys-soft); --lit: var(--sys); }
+.part[data-kind="sys"] b { color: var(--sys-ink); }
+.part[data-kind="tool"] { --lit: var(--ai); }
+.part.agent { background: var(--ai); border-color: var(--ai); padding: 16px 14px; align-content: center; --lit: var(--ai-soft); }
+.part.agent b { color: var(--on-ai); font-size: 16px; }
+.part.agent span { color: var(--on-ai); opacity: .88; }
+.part.unknown { border-style: dashed; background: var(--surface-2); }
+.part.unknown::after { content: "非公開"; position: static; order: -1; justify-self: start; margin-bottom: 2px; font-size: 10.5px; color: var(--muted); border: 1px dashed var(--muted); border-radius: 6px; padding: 0 5px; line-height: 1.6; }
+.part.partial::after { content: "一部だけ判明"; position: static; order: -1; justify-self: start; margin-bottom: 2px; font-size: 10.5px; color: var(--sys-ink); border: 1px dashed var(--sys); border-radius: 6px; padding: 0 5px; line-height: 1.6; }
+.part.lit, .part.selected { box-shadow: 0 0 0 3px var(--lit); }
+.part.lit { transform: translateY(-3px); }
+.detail { display: grid; gap: 10px; position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); }
+.detail-chip { justify-self: start; font-size: 12px; padding: 1px 10px; border-radius: 999px; background: var(--ai-soft); color: var(--ai-ink); }
+.detail-chip[data-status="partial"] { background: var(--sys-soft); color: var(--sys-ink); }
+.detail-chip[data-status="unknown"] { background: var(--surface-2); color: var(--muted); border: 1px dashed var(--muted); }
+.detail p { font-size: 14.5px; }
+.flow-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.flow-cap { font-size: 14px; min-height: 1.8em; flex: 1 1 260px; }
+.flow-cap b { font-family: var(--font-mono); color: var(--ai-ink); margin-right: 6px; }
+
+/* timeline */
+.tl { display: grid; gap: 14px; }
+.tl-scroll { overflow-x: auto; }
+.tl-svg { width: 100%; min-width: 760px; height: auto; display: block; }
+.tl-svg text { font-family: var(--font-body); }
+.grid-line { stroke: var(--line); stroke-width: 1; }
+.axis-text { fill: var(--muted); font-size: 12px; }
+.lane-band { fill: var(--surface-2); }
+.lane-label { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.lane-label.human { fill: var(--human-ink); }
+.lane-label.ai { fill: var(--ai-ink); }
+.lane-label.sys { fill: var(--sys-ink); }
+.best { fill: none; stroke: var(--ai); stroke-width: 3; stroke-linejoin: round; }
+.others { fill: none; stroke: var(--other); stroke-width: 2; stroke-dasharray: 5 4; }
+.score-label { font-size: 11.5px; fill: var(--muted); }
+.score-label.ai { fill: var(--ai-ink); font-weight: 700; }
+.final-dot { fill: var(--surface); stroke: var(--ai); stroke-width: 2; }
+.final-dot.win { fill: var(--ai); }
+.fail { stroke: var(--ng); stroke-width: 2; }
+.ev { transition: opacity .25s; }
+.ev.future { opacity: .14; }
+.ev-agent { fill: var(--ai); }
+.ev-sys { fill: var(--sys); }
+.ev-human { fill: var(--human); }
+.life rect { fill: var(--human-soft); stroke: var(--human); stroke-width: 1; stroke-dasharray: 4 3; }
+.life text { fill: var(--human-ink); font-size: 11px; }
+.aud rect { fill: var(--sys-soft); stroke: var(--sys); stroke-width: 1.2; }
+.aud text { fill: var(--sys-ink); font-size: 11px; }
+.playhead { stroke: var(--ink); stroke-width: 1.5; }
+.playhead-label { fill: var(--ink); font-size: 12px; font-family: var(--font-mono); }
+.tl-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.tl-controls input[type="range"] { flex: 1 1 220px; accent-color: var(--ai); min-width: 0; }
+.clock { font-family: var(--font-mono); font-size: 15px; min-width: 4.5em; font-variant-numeric: tabular-nums; }
+.now-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.now { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.now .who { font-size: 12px; font-weight: 700; }
+.now.human { border-top: 3px solid var(--human); }
+.now.human .who { color: var(--human-ink); }
+.now.ai { border-top: 3px solid var(--ai); }
+.now.ai .who { color: var(--ai-ink); }
+.now.sys { border-top: 3px solid var(--sys); }
+.now.sys .who { color: var(--sys-ink); }
+.now .when { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.now .what { font-size: 14px; line-height: 1.7; }
+.tl-note { font-size: 13px; color: var(--muted); }
+
+/* prep loop */
+.prep { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+.prep-fig svg { width: 100%; max-width: 420px; height: auto; display: block; margin-inline: auto; }
+.prep-fig text { font-family: var(--font-body); }
+.p-ring { fill: none; stroke: var(--line); stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; }
+.p-node rect { fill: var(--surface); stroke: var(--sys); stroke-width: 1.8; }
+.p-node .t1 { fill: var(--ink); font-size: 14px; font-weight: 700; }
+.p-node .t2 { fill: var(--muted); font-size: 11.5px; }
+.p-node.unknown rect { stroke-dasharray: 5 4; stroke: var(--muted); }
+.p-dot { fill: var(--sys); stroke: var(--surface); stroke-width: 3; }
+.p-num { fill: var(--ink); font-family: var(--font-display); font-size: 34px; }
+.p-sub { fill: var(--muted); font-size: 12px; }
+.p-arrow { fill: var(--muted); }
+.prep-text { display: grid; gap: 14px; min-width: 0; }
+.known-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14.5px; }
+.known-list li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.tagk { font-size: 11px; padding: 0 7px; border-radius: 6px; white-space: nowrap; }
+.tagk.known { background: var(--ai-soft); color: var(--ai-ink); }
+.tagk.unknown { border: 1px dashed var(--muted); color: var(--muted); }
+
+/* harness history */
+.hist-panel { display: grid; gap: 14px; }
+.hist-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.hist-axis { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+.hist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.hstep { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.hbar-wrap { position: relative; height: 140px; border-bottom: 1.5px solid var(--line); }
+.hbar { position: absolute; left: 14%; right: 14%; bottom: 0; height: var(--h); background: var(--ai-soft); border: 1.5px solid var(--ai); border-bottom: 0; border-radius: 8px 8px 0 0; transform-origin: bottom; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.hstep.final .hbar { background: var(--sys); border-color: var(--sys); }
+.hghost { position: absolute; left: 14%; right: 14%; bottom: 0; height: 100%; border: 1.5px dashed var(--ng); border-bottom: 0; border-radius: 8px 8px 0 0; display: grid; place-items: center; transition: opacity .6s; }
+.hghost span { font-size: 12px; font-weight: 700; color: var(--ng); background: var(--surface); padding: 0 6px; border-radius: 6px; }
+.hist.pre .hbar { transform: scaleY(0); transition: none; }
+.hist.pre .hghost { opacity: 0; transition: none; }
+.hist .hstep:nth-child(1) .hbar { transition-delay: .1s; }
+.hist .hstep:nth-child(2) .hbar { transition-delay: .6s; }
+.hist .hstep:nth-child(3) .hbar { transition-delay: 1.1s; }
+.hist .hghost { transition-delay: 1.8s; }
+.hist .hstep:nth-child(4) .hbar { transition-delay: 2.3s; }
+.hist .hstep:nth-child(5) .hbar { transition-delay: 2.9s; }
+.htext { display: grid; gap: 2px; font-size: 13px; line-height: 1.65; color: var(--muted); }
+.htext b { font-size: 14.5px; color: var(--ink); }
+.hwhen { font-family: var(--font-mono); font-size: 11.5px; color: var(--ai-ink); }
+.hstep.turn .hwhen { color: var(--ng); }
+.hstep.final .hwhen, .hstep.final b { color: var(--sys-ink); }
+.why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.why-item { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--sys); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+.why-item h3 { font-size: 15.5px; }
+.why-item p, .memo p { font-size: 14.5px; }
+.memo { display: grid; gap: 10px; border-left: 4px solid var(--human); }
+
+/* replace table */
+.rep { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14.5px; }
+.rep th, .rep td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.rep th { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: .04em; }
+.rep td:first-child { color: var(--human-ink); font-weight: 700; }
+.rep td:nth-child(2) { color: var(--sys-ink); font-weight: 700; }
+.table-scroll { overflow-x: auto; }
+
+/* unknowns */
+.todo { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.todo li { border: 1.5px dashed var(--line); border-radius: 12px; padding: 12px 14px; background: var(--surface); font-size: 14.5px; display: grid; gap: 2px; }
+.todo li span { font-size: 12.5px; color: var(--muted); }
+.todo li.done { border: 1.5px solid var(--sys); background: var(--sys-soft); padding-left: 38px; position: relative; }
+.todo li.done::before { content: "✓"; position: absolute; left: 14px; top: 11px; color: var(--sys-ink); font-weight: 700; }
+.todo li.done span { color: var(--sys-ink); }
+.log { font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
+.log b { color: var(--ink); font-family: var(--font-mono); font-weight: 500; }
+
+.sources { display: grid; gap: 8px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; }
+.sources ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+
+@media (max-width: 860px) {
+  .map-wrap { grid-template-columns: minmax(0, 1fr); }
+  .detail { position: static; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .core { grid-template-columns: minmax(0, 1fr); }
+  .prep { grid-template-columns: minmax(0, 1fr); }
+  .now-cards { grid-template-columns: minmax(0, 1fr); }
+  .todo { grid-template-columns: minmax(0, 1fr); }
+  .why { grid-template-columns: minmax(0, 1fr); }
+  .hist { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .hstep { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: end; }
+  .hbar-wrap { height: 84px; }
+  .hbar, .hghost { left: 10%; right: 10%; }
+  .link-r { display: none; }
+  .map-row > .part { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+
+<main class="page">
+
+  <header class="hero">
+    <p class="eyebrow">ISUCON2026 優勝・Typing Bears（1人チーム）</p>
+    <h1>人が触ったのは朝の1回だけ。<br>8時間を回したハーネスの中身</h1>
+    <p class="lead">ハーネスとは、AIに作業をさせるために周りに用意した仕組み全体のことです。優勝した人は約3か月かけてこれを作り、当日は競技エージェント（Claude Code）を起動したあと、一度も指示を入力しませんでした。面白いのは、作り込んだ仕組みを本番の1か月前に一度ほぼ全部捨て、素に近いClaude Codeに少しずつ足し直したものが勝ったことです。</p>
+    <div class="status">
+      <span class="chip">2026年11月4日更新</span>
+      <span>当日編の記事と、本人が出演したポッドキャスト（fukabori.fm 142）の音声を文字起こししたものをもとに作成。準備編はまだ公開されていないため、中身が分からない部分は点線で示しています。</span>
+    </div>
+    <ul class="legend" aria-label="色の意味">
+      <li><span class="sw human"></span>人</li>
+      <li><span class="sw ai"></span>競技エージェント（AI）</li>
+      <li><span class="sw sys"></span>見張り役（人の代わりに動く仕組み）</li>
+      <li><span class="sw unknown"></span>中身が非公開</li>
+    </ul>
+    <ul class="facts" aria-label="当日の数字">
+      <li><b>0回</b><span>競技エージェントへの人の入力</span></li>
+      <li><b>625,857</b><span>最終スコア（2位は475,546）</span></li>
+      <li><b>86回</b><span>ベンチマークの走行（0点の回を含む）</span></li>
+      <li><b>100回以上</b><span>本番前に練習問題を解かせた回数（約3か月）</span></li>
+    </ul>
+  </header>
+
+  <!-- 1. 構造 -->
+  <section class="section" id="map-section">
+    <div class="section-head">
+      <p class="eyebrow">1. 全体の構造</p>
+      <h2>4種類の部品でできている</h2>
+      <p>起動と終了を受け持つ仕組み、毎回の条件、AIが一人で使える道具、そして人の代わりに口を出す見張り役です。部品を押すと右に説明が出ます。「当日の流れで光らせる」を押すと、動いた順に光ります。</p>
+    </div>
+    <div class="map-wrap">
+      <div class="panel map" id="map">
+        <div class="map-row tight">
+          <button class="part" type="button" data-id="human" data-kind="human"><b>人（Typing Bears）</b><span>8:53に1回だけ操作</span></button>
+          <span class="link-r" aria-hidden="true">→</span>
+          <button class="part" type="button" data-id="launcher" data-kind="sys"><b>起動役のClaude Code</b><span>スキルで起動を引き受ける</span></button>
+          <span class="link-r" aria-hidden="true">→</span>
+          <button class="part" type="button" data-id="precheck" data-kind="sys"><b>事前チェック</b><span>鍵・AWSの枠を確認して待機</span></button>
+          <span class="link-r" aria-hidden="true">→</span>
+          <button class="part" type="button" data-id="runner" data-kind="sys"><b>実行スクリプト</b><span>10:00に起動し、時間で閉じる</span></button>
+        </div>
+        <div class="link-down" aria-hidden="true">↓ 10:00 に1行の指示で起動</div>
+        <div class="core">
+          <div class="col">
+            <div class="col-title">最初に読むもの</div>
+            <button class="part" type="button" data-id="conditions" data-kind="tool"><b>CONDITIONS.md</b><span>今回だけの条件</span></button>
+            <button class="part partial" type="button" data-id="prompt" data-kind="tool"><b>進め方の指示</b><span>素に近い形から薄く足したもの</span></button>
+          </div>
+          <div class="col">
+            <div class="col-title">主役</div>
+            <button class="part agent" type="button" data-id="agent" data-kind="ai"><b>競技エージェント</b><span>Claude Code・Opus 5.5</span><span>構築・実装・計測・判断・記録を一人で</span></button>
+          </div>
+          <div class="col">
+            <div class="col-title">一人で使える道具</div>
+            <button class="part" type="button" data-id="portal" data-kind="tool"><b>ログイン済みポータル</b><span>ベンチ実行・順位表</span></button>
+            <button class="part" type="button" data-id="aws" data-kind="tool"><b>AWS</b><span>サーバーを自分で構築</span></button>
+            <button class="part" type="button" data-id="servers" data-kind="tool"><b>競技サーバー4台</b><span>デプロイ・設定変更</span></button>
+            <button class="part" type="button" data-id="measure" data-kind="tool"><b>計測</b><span>ログ・pprof・利用者数</span></button>
+            <button class="part" type="button" data-id="alert" data-kind="tool"><b>非常用の連絡・再起動</b><span>Slack通知・外からの再起動</span></button>
+          </div>
+        </div>
+        <div class="link-down" aria-hidden="true">↑ 止まりかけたとき・条件がそろったときに割り込む</div>
+        <div class="group-title">見張り役（人の代わりに口を出す仕組み）</div>
+        <div class="map-row">
+          <button class="part partial" type="button" data-id="stopHook" data-kind="sys"><b>続けさせるhook</b><span>止まりかけたら残り時間を添えて「続けて」</span></button>
+          <button class="part" type="button" data-id="hookStall" data-kind="sys"><b>30分停滞のhook</b><span>最高点が伸びないと発動</span></button>
+          <button class="part partial" type="button" data-id="auditor" data-kind="sys"><b>監査役</b><span>判断をチェックリストで見直す</span></button>
+          <button class="part" type="button" data-id="hookEnd" data-kind="sys"><b>17:20の終盤hook</b><span>仕上げの手順へ</span></button>
+          <button class="part" type="button" data-id="stopper" data-kind="sys"><b>止める判定の道具</b><span>期待値で最後の1本を決める</span></button>
+          <button class="part" type="button" data-id="cron" data-kind="sys"><b>15分ごとの見守り</b><span>様子を人に報告するだけ</span></button>
+        </div>
+      </div>
+      <aside class="panel detail" aria-live="polite">
+        <span class="detail-chip" id="detailChip" data-status="known">判明</span>
+        <h3 id="detailTitle">競技エージェント</h3>
+        <p id="detailBody"></p>
+      </aside>
+    </div>
+    <div class="flow-bar">
+      <button class="btn" id="flowBtn" type="button" aria-pressed="false">当日の流れで光らせる</button>
+      <p class="flow-cap" id="flowCap">部品を押すと説明が出ます。</p>
+    </div>
+  </section>
+
+  <!-- 2. 再生 -->
+  <section class="section" id="replay">
+    <div class="section-head">
+      <p class="eyebrow">2. 当日の8時間を再生</p>
+      <h2>見張り役が、人の代わりに口を出した</h2>
+      <p>上がスコア、下の3段が「人」「競技エージェント」「見張り役」がそれぞれ何をしていたかです。人の段にあるのは、朝の1回の操作と、子どもと過ごした時間だけです。再生するか、つまみを動かして時刻を選んでください。</p>
+    </div>
+    <div class="panel tl">
+      <div class="tl-controls">
+        <button class="btn" id="playBtn" type="button" aria-pressed="false">最初から再生</button>
+        <input type="range" id="timeRange" min="530" max="1080" step="1" value="1080" aria-label="時刻">
+        <output class="clock" id="clock" for="timeRange">18:00</output>
+      </div>
+      <div class="tl-scroll">
+        <svg class="tl-svg" id="tlSvg" viewBox="0 0 900 362" role="img" aria-label="10時から18時までのスコアの推移と、人・競技エージェント・見張り役の動き">
+          <defs><clipPath id="reveal"><rect id="revealRect" x="0" y="0" width="900" height="362"/></clipPath></defs>
+          <g id="tlGrid"></g>
+          <g id="tlScore" clip-path="url(#reveal)"></g>
+          <g id="tlLanes"></g>
+          <g id="tlEvents"></g>
+          <line class="playhead" id="playhead" x1="884" y1="18" x2="884" y2="316"/>
+        </svg>
+      </div>
+      <div class="now-cards" aria-live="polite">
+        <div class="now human"><span class="who">人</span><span class="when" id="nowHumanT"></span><span class="what" id="nowHuman"></span></div>
+        <div class="now ai"><span class="who">競技エージェント</span><span class="when" id="nowAiT"></span><span class="what" id="nowAi"></span></div>
+        <div class="now sys"><span class="who">見張り役</span><span class="when" id="nowSysT"></span><span class="what" id="nowSys"></span></div>
+      </div>
+      <p class="tl-note">灰色の点線は、1位のエージェントが順位表から読んだ他チームの最高点（17:00で順位表は凍結）。人の段の時間帯は記事の記述からのおおよそです。</p>
+    </div>
+  </section>
+
+  <!-- 3. 準備 -->
+  <section class="section" id="prep-section">
+    <div class="section-head">
+      <p class="eyebrow">3. 準備の3か月</p>
+      <h2>作り込んで、捨てて、薄く足し直した</h2>
+      <p>準備の前半は、人の上手なやり方をAIに教え込む方向で、仕組みをどんどん厚くしていきました。ところが9月末、ほぼ何もない素の状態で試すと、そちらの方が点が高かった。そこで一度ほぼ全部を捨て、効くものだけを少しずつ足し直したのが本番の形です。</p>
+    </div>
+
+    <div class="panel hist-panel">
+      <div class="hist-head">
+        <span class="hist-axis">仕組みの作り込み（イメージ）</span>
+        <button class="btn" id="histBtn" type="button">もう一度動かす</button>
+      </div>
+      <ol class="hist" id="hist">
+        <li class="hstep">
+          <div class="hbar-wrap"><div class="hbar" style="--h: 12%"></div></div>
+          <div class="htext">
+            <span class="hwhen">7月下旬〜8月初め</span>
+            <b>素のまま試す</b>
+            <span>過去問（ISUCON14）を、ほぼ何も教えずに解かせた。何も言わなくても、ある程度まで自分で進めた。</span>
+          </div>
+        </li>
+        <li class="hstep">
+          <div class="hbar-wrap"><div class="hbar" style="--h: 55%"></div></div>
+          <div class="htext">
+            <span class="hwhen">8月</span>
+            <b>人のやり方を教え込む</b>
+            <span>「初期・探索・収束・最終盤」の4段階を決め、段階ごとの作業とスクリプトのひな型を用意。本人いわく、これは判断ミスだった。</span>
+          </div>
+        </li>
+        <li class="hstep">
+          <div class="hbar-wrap"><div class="hbar" style="--h: 100%"></div></div>
+          <div class="htext">
+            <span class="hwhen">8月中旬〜9月</span>
+            <b>さらに作り込む</b>
+            <span>仮説を裏付けの観測とセットで全部書き出し、大胆なものから試す二重ループのスキル。2つのエージェントを並べて走らせ、良い方を採りつつ、もう一方の手も取り込む。</span>
+          </div>
+        </li>
+        <li class="hstep turn">
+          <div class="hbar-wrap"><div class="hghost"><span>捨てた</span></div><div class="hbar" style="--h: 6%"></div></div>
+          <div class="htext">
+            <span class="hwhen">9月末</span>
+            <b>全部消して試す</b>
+            <span>家族旅行中に実験だけ回していたら、ほぼ素の状態の方が点が高いと分かった。「新しいモデルが出たら、仕組みを一度全部消して試す」をやっていなかったと気づく。</span>
+          </div>
+        </li>
+        <li class="hstep final">
+          <div class="hbar-wrap"><div class="hbar" style="--h: 30%"></div></div>
+          <div class="htext">
+            <span class="hwhen">10月初めから約2週間</span>
+            <b>薄く足し直す</b>
+            <span>ほぼ何もない状態を土台に、効くものだけを少しずつ足した。止まりかけたら声をかけるhookもその1つ。これが本番の形。</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="why">
+      <div class="why-item">
+        <h3>役割分担をやめて、1つのセッションに</h3>
+        <p>作り込んだ版では、段階ごとにサブエージェントへ仕事を任せていました。でもサブエージェントは毎回まっさらな状態から始まるので、マニュアルを読み直し、再起動の確認をやり直すことになる。最近は会話の圧縮がうまくなり、全部を1つの会話に詰め込んでも困らなかったので、1つのセッションに戻しました。</p>
+      </div>
+      <div class="why-item">
+        <h3>モデルが変われば、正解の厚みも変わる</h3>
+        <p>本人の推測では、1年前のモデルなら作り込んだ版の方が勝っていたかもしれない（検証はしていない）。今のモデルは、ゴールと条件をきちんと伝えれば働いてくれる。だから、新しいモデルが出るたびに薄い状態から測り直す価値があります。</p>
+      </div>
+    </div>
+
+    <div class="prep">
+      <figure class="prep-fig" style="margin:0">
+        <svg viewBox="0 0 400 380" role="img" aria-label="練習問題を用意し、人なしで解かせ、結果を見比べ、仕組みを直す、を100回以上繰り返したループ図">
+          <circle class="p-ring" cx="200" cy="190" r="125"/>
+          <path class="p-arrow" d="M-6,-6 L6,0 L-6,6 Z" transform="translate(288 102) rotate(45)"/>
+          <path class="p-arrow" d="M-6,-6 L6,0 L-6,6 Z" transform="translate(288 278) rotate(135)"/>
+          <path class="p-arrow" d="M-6,-6 L6,0 L-6,6 Z" transform="translate(112 278) rotate(225)"/>
+          <path class="p-arrow" d="M-6,-6 L6,0 L-6,6 Z" transform="translate(112 102) rotate(315)"/>
+          <g class="p-node"><rect x="135" y="36" width="130" height="58" rx="12"/><text class="t1" x="200" y="62" text-anchor="middle">練習問題を選ぶ</text><text class="t2" x="200" y="80" text-anchor="middle">7問から人が選ぶ</text></g>
+          <g class="p-node"><rect x="262" y="161" width="130" height="58" rx="12"/><text class="t1" x="327" y="187" text-anchor="middle">人なしで解かせる</text><text class="t2" x="327" y="205" text-anchor="middle">本番と同じ形で起動</text></g>
+          <g class="p-node"><rect x="135" y="286" width="130" height="58" rx="12"/><text class="t1" x="200" y="312" text-anchor="middle">見比べる</text><text class="t2" x="200" y="330" text-anchor="middle">点・会話量・やり残し</text></g>
+          <g class="p-node"><rect x="8" y="161" width="130" height="58" rx="12"/><text class="t1" x="73" y="187" text-anchor="middle">仕組みを直す</text><text class="t2" x="73" y="205" text-anchor="middle">issueに積んで直す</text></g>
+          <text class="p-num" x="200" y="196" text-anchor="middle">100+</text>
+          <text class="p-sub" x="200" y="218" text-anchor="middle">回・約3か月</text>
+          <circle class="p-dot" id="prepDot" cx="288" cy="102" r="8"/>
+        </svg>
+      </figure>
+      <div class="prep-text">
+        <p>捨てる前も後も、やっていたことは同じです。練習問題を解かせては結果を見比べ、仕組みを直す。普通の開発でテストを回しながら製品を直すのと同じことを、ハーネスに対してやっています。</p>
+        <ul class="known-list">
+          <li><span class="tagk known">判明</span><span>評価用の問題は7問。過去問5問（ISUCON14・13・12と、第10回・第8回の本選。音声からの聞き取り）、今年4月ごろ公開された合同演習の問題、自作の問題1問</span></li>
+          <li><span class="tagk known">判明</span><span>変更のたびに全問を解き直すとお金がかかるので、どの問題で試すかは人が選んだ。直した内容が特定の問題にだけ効く形になっていないか、ほかの問題を悪くしていないかも確かめた</span></li>
+          <li><span class="tagk known">判明</span><span>毎回の結果を見比べ、「前は思いついて効いたのに、今回は思いつかなかった手」を拾って足した。改善点はハーネスのリポジトリにissueとして積んだ（準備のあいだは人が関わる）</span></li>
+          <li><span class="tagk known">判明</span><span>点の推移と会話の量（AIが1回に読む量）を、練習のたびにグラフで見ていた</span></li>
+          <li><span class="tagk known">判明</span><span>古い過去問は今のAIには小さすぎて解き切ってしまい、ベンチマーカー側のCPUが先に詰まる。点のばらつきも大きかった</span></li>
+          <li><span class="tagk known">判明</span><span>途中で、用意したサーバーを渡す形から、エージェントがCloudFormationで自分で立てる形に変えた。そのせいで、それ以前の結果とは比べられなくなった</span></li>
+          <li><span class="tagk unknown">非公開</span><span>issueの中身。どの失敗から、どの文言や部品が生まれたか</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel memo">
+      <h3>過去問の答えを、AIが覚えていないか確かめる</h3>
+      <p>モデルは学習データで過去問の解説を読んでいる可能性があります。そこで、検索を使わせずに「この問題の解き方について知っていることは？」と聞いて確かめたところ、ISUCON14は典型的な解き方まで知っていました。過去問だけで測ると、仕組みの力ではなく暗記の力を測ってしまう。だから自作の問題を作りました。</p>
+      <p>自作の問題は、裏で仮想のLLM APIを呼ぶECサイトのチャットボット。商品情報と在庫をプロンプトに入れるので、在庫が変わるたびにプロンプトキャッシュが効かなくなります。在庫の更新をあえて遅らせる（lazyにする）のが解き方でした。一方、データ量を2倍にしてもほぼ差がつかず、本番の地域間の遅延のような仕掛けは思いつかなかったそうです。</p>
+    </div>
+  </section>
+
+  <!-- 4. 置き換え -->
+  <section class="section" id="replace">
+    <div class="section-head">
+      <p class="eyebrow">4. 考え方</p>
+      <h2>人がやっていた仕事を、仕組みに置き換えた</h2>
+      <p>他の上位チームでは、人が競技中に口を出して方向を直していました。1位はその一言一言を、条件で動く部品に置き換えています。</p>
+    </div>
+    <div class="panel table-scroll">
+      <table class="rep">
+        <thead><tr><th>人がやっていたこと</th><th>置き換えた部品</th><th>普段の仕事でやるなら</th></tr></thead>
+        <tbody>
+          <tr><td>「この条件でやって」と伝える</td><td>CONDITIONS.md</td><td>毎回変わる条件と終わりの条件は依頼文に、いつも同じ進め方は CLAUDE.md に分けて書く</td></tr>
+          <tr><td>始まってから準備不足に気づく</td><td>事前チェックのスクリプト</td><td>鍵・権限・残り枠など「ないと止まるもの」を、AIに渡す前にスクリプトで確かめる</td></tr>
+          <tr><td>AIに呼ばれて操作を手伝う</td><td>ログイン済みブラウザ・AWS・サーバーを最初から渡す</td><td>テスト・ビルド・確認のコマンドと必要な権限を最初から渡し、AIが人を呼ぶ理由をなくす</td></tr>
+          <tr><td>「止まってないで、続けて」と言う</td><td>続けさせるhook（残り時間つき）</td><td>Claude Code の Stop hook か /goal で、終わりの条件を満たすまで続けさせる。締め切りの時刻も最初に伝えておく</td></tr>
+          <tr><td>「様子どう？」と見に行く</td><td>15分ごとの見守り</td><td>定期的に進み具合を要約させ、通知だけ受け取る。見守り役には作業そのものを触らせない</td></tr>
+          <tr><td>本当に困ったときに助ける</td><td>Slack通知と外からの再起動</td><td>「どうしても無理なときだけ、ここに連絡」という出口を1つだけ用意しておく</td></tr>
+          <tr><td>「伸びてないぞ、見直して」と言う</td><td>30分停滞のhook ＋ 監査役</td><td>「30分進まなかったら、それまでの案を捨てて別案を3つ出す」と書く。チェックリストを渡した別のチャットにレビューさせる</td></tr>
+          <tr><td>「そろそろ仕上げよう」と言う</td><td>17:20の終盤hook</td><td>「締め切りの○分前になったら新しいことはやめ、確認と仕上げだけにする」と書く</td></tr>
+          <tr><td>「どこで止める？」と迷う</td><td>期待値で止める判定の道具</td><td>「テストが全部通り、計測で5%以上良くなったら採用」のように、数字で決める</td></tr>
+          <tr><td>仕組みが合っているか試す</td><td>練習問題で100回以上</td><td>過去にやった似た作業を3〜5個取っておき、CLAUDE.md を大きく変えたらそれで試して比べる。AIが答えを知っていそうな題材は避ける</td></tr>
+          <tr><td>新しいモデルに合わせ直す</td><td>9月末に一度全部消して測り直した</td><td>モデルが変わったら、CLAUDE.md や手順書を外した素の状態と比べ、効いている部分だけ残す</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. 未公開 -->
+  <section class="section" id="todo">
+    <div class="section-head">
+      <p class="eyebrow">5. 準備編を待っている部分</p>
+      <h2>まだ分からないこと</h2>
+      <p>準備編が公開されたら、この部分と図の点線を更新します。ポッドキャストで分かったものは、緑の枠に移しました。</p>
+    </div>
+    <ul class="todo">
+      <li>進め方の指示の全文<span>素に近い形から足し直したことと、競技時間を伝えたことまでは判明</span></li>
+      <li>Stop hook の文面<span>時間帯ごとに書き分けたことは判明。何と声をかけたかは不明</span></li>
+      <li>監査役のチェックリストの全項目<span>判明しているのは「固定の遅延とレート調整を両方比べたか」の1項目だけ</span></li>
+      <li>30分停滞・17:20のhookと Stop hook の関係<span>同じ仕組みの一部か、別の仕組みか</span></li>
+      <li>100回の練習で何をどう直したか<span>issueに積んだことは判明。どの失敗から何を足したかは不明</span></li>
+      <li>自作問題とベンチマーカーの作り方<span>チャットボットの題材までは判明</span></li>
+    </ul>
+    <ul class="todo done-list" aria-label="ポッドキャストで分かったこと">
+      <li class="done">8時間動かし続ける工夫<span>止まりかけたら残り時間を添えて「続けて」と言う Stop hook（図の1に追加）</span></li>
+      <li class="done">herdr の最終構成<span>起動役・事前チェック・競技エージェントの3つの枠と、15分ごとの見守り（図の1に追加）</span></li>
+      <li class="done">練習環境と評価のしかた<span>過去問5問＋合同演習＋自作1問。暗記の確認もした（図の3に追加）</span></li>
+    </ul>
+    <div class="log">
+      <span><b>2026-11-04</b>　fukabori.fm 142 の音声を文字起こしして追記（事前チェック、Stop hook、15分ごとの見守り、非常用の道具、準備の変遷、評価のしかた）。文字起こしは自動のため、固有名詞などに聞き違いがありえます</span>
+      <span><b>2026-11-04</b>　当日編の記事（11月2日公開）と fukabori.fm 142 の話題一覧をもとに作成</span>
+    </div>
+  </section>
+
+  <footer class="sources">
+    <p>出典</p>
+    <ul>
+      <li><a href="https://zenn.dev/luvtechno/articles/isucon2026-competition-day">ISUCON2026 で優勝しました（当日編）</a></li>
+      <li><a href="https://fukabori.fm/episode/142">fukabori.fm 142. ISUCON2026で優勝する方法 w/ kawasy</a></li>
+      <li><a href="https://isucon.net/archives/60126600.html">ISUCON2026 受賞チームと全チームのスコア</a></li>
+      <li><a href="https://hashout.jp/ai/13728/">人間ゼロ介入のAIエージェントがISUCON2026を制した（hashout）</a></li>
+    </ul>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s) => document.querySelector(s);
+  const NS = 'http://www.w3.org/2000/svg';
+  const fmt = (m) => { const h = Math.floor(m / 60); const mm = Math.floor(m % 60); return h + ':' + String(mm).padStart(2, '0'); };
+  function svgEl(tag, attrs, parent) {
+    const el = document.createElementNS(NS, tag);
+    Object.entries(attrs || {}).forEach(([k, v]) => el.setAttribute(k, v));
+    if (parent) parent.appendChild(el);
+    return el;
+  }
+
+  /* ---------- 1. map ---------- */
+  const PARTS = {
+    human: { title: '人（Typing Bears）', status: '判明', key: 'known', body: '当日の操作は8:53の1回だけ。起動役のClaude Codeに競技エージェントの起動を頼み、ポータルにログインしたブラウザ（Playwrightのセッション）を渡しました。そのあとは子どもと過ごし、様子はスマホで時々見るだけ。競技エージェントへの入力は0回、エージェントが人を呼んだ回数も0回でした。' },
+    launcher: { title: '起動役のClaude Code', status: '判明', key: 'known', body: '用意しておいたスキル（agent skill）で起動の依頼を受けるClaude Codeのセッション。人はここで使う設定と競技時間を伝え、立ち上がったブラウザでポータルにログインするだけでした。起動役は herdr（tmux のように画面を分割してエージェントのセッションを管理するツール）のAPIを呼び、事前チェックと実行スクリプトを動かします。練習のときは、終わったサーバーの片付けや、過去の実行記録から今回試すことをissueにまとめ直す仕事も受け持っていましたが、本番は起動だけです。' },
+    precheck: { title: '事前チェック', status: '判明', key: 'known', body: 'herdr で分割した別の枠で走るスクリプト。GitHubに登録したSSH鍵があるか、この用途専用に分けたAWSのプロファイルで、サーバーを立てる上限（クォータ）に余裕があるかなどを確かめ、だめなら知らせます。問題がなければ10:00の競技開始まで待ちます。始まってから「鍵がない」で止まる事故を、始まる前に潰しておく部品です。' },
+    runner: { title: '実行スクリプト', status: '判明', key: 'known', body: '10:00に herdr でもう1つ枠を開き、競技エージェントのClaude Codeを起動。渡した指示は「CONDITIONS.mdを読み、今回の条件を確認してから、ISUCONを解いてください。」の1行だけです（本人いわく「ほとんど意味ない」）。17:49:59 には /exit を送ってセッションを閉じました。始まりと終わりを人の代わりに受け持つ部品です。' },
+    conditions: { title: 'CONDITIONS.md', status: '判明', key: 'known', body: 'その回ごとに変わる条件を書いたファイル。競技時間、レギュレーション、ポータルのURLなど。練習のたびにここだけ差し替えれば、同じ仕組みで別の問題を解かせられます。' },
+    prompt: { title: '進め方の指示', status: '一部だけ判明', key: 'partial', body: '毎回同じ進め方は、Claude Code の基本の指示（system prompt）に追記して渡しています。ポッドキャストによると、作り込んだ指示は9月末に一度捨て、ほぼ何もない状態から少しずつ足し直したもの。競技の開始時刻と終了時刻もここで伝えていて、エージェントはそれを覚えて残り時間を判断していました。文面そのものは準備編で公開される予定です。' },
+    agent: { title: '競技エージェント', status: '判明', key: 'known', body: 'Claude Code（モデルは Claude Opus 5.5）を、クラウドではなく本人のPCで動かしました。動きを観察して直すにはローカルの方が扱いやすかったからです。サーバーの構築から、実装、デプロイ、計測、判断、記録までを1つのセッションで行い、サブエージェントは少し使う程度。8時間で走行86回、コミット19個。会話が約97万トークンに達した16:27に1回だけ圧縮しています。問題に仕込まれていた偽の AGENTS.md には、対策なしでも従いませんでした。準備ではGPT-6.1 Solも試しましたが、素の状態ではOpusの方が点が高かったそうです。' },
+    portal: { title: 'ログイン済みポータル', status: '判明', key: 'known', body: '人が朝ログインしたブラウザを受け取り、マニュアルを読み、ベンチマークを実行し、順位表も読みました。ログインのために人を呼ぶ必要がなくなります。' },
+    aws: { title: 'AWS', status: '判明', key: 'known', body: 'CloudFormation を使い、競技用のサーバー4台をエージェント自身が作りました（10:07に完成）。' },
+    servers: { title: '競技サーバー4台', status: '判明', key: 'known', body: 'asia に2台、europe と america に1台ずつ。エージェントが SSH でデプロイや設定変更を行い、地域間の往復時間（約100ms）も自分で測りました。' },
+    measure: { title: '計測', status: '判明', key: 'known', body: 'アクセスログ、pprof、日ごとの利用者数などを読み、ボトルネックと点の入り方を推定しました。「欧米の利用者が増えていない」と気づいたのも、Memories の閲覧が点の約6割と見積もったのも、この計測からです。' },
+    alert: { title: '非常用の連絡・再起動', status: '判明', key: 'known', body: '人を呼ばないのが基本方針ですが、出口だけは残していました。どうしても続けられない状況になったら Slack で本人に知らせる道具と、メモリ不足で固まってSSHで入れなくなったサーバーを、EC2の管理権限で外から強制再起動する道具です。当日、エージェントが人を呼んだ回数は0回でした。' },
+    stopHook: { title: '続けさせるhook（Stop hook）', status: '一部だけ判明', key: 'partial', body: 'Claude Code の Stop hook は、AIが手を止めて人の入力を待とうとした瞬間に処理を差し込めます。ここで「残り○分、今は○時なので、続けて」といった声をかけ、作業を再開させます。文面は時間帯ごとに書き分けてあり、最後の30分ほどは止まってよいことにしていました。これがないと、エージェントは2時間ほどで「このへんで満足」と止まってしまうことがあったそうです。記事にある30分停滞・17:20の終盤のhookとの関係（同じ仕組みの一部か、別の仕組みか）はまだ分かりません。' },
+    cron: { title: '15分ごとの見守り', status: '判明', key: 'known', body: 'Claude Code の cron 機能で、15分おきに競技エージェントのセッションの様子を確認し、本人に伝えます。報告するだけで、競技の結果には一切影響しません。人が画面を見に行かなくても状況が分かるようにする部品です。' },
+    hookStall: { title: '30分停滞のhook', status: '判明', key: 'known', body: '最高点が30分以上伸びないと、Claude Code の hook（決まったタイミングで処理を差し込む仕組み）が監査役の起動を促します。14:02 と 16:31 に発動しました。人の「伸びてないぞ、見直して」の代わりです。' },
+    auditor: { title: '監査役', status: '一部だけ判明', key: 'partial', body: 'サブエージェントとして起動し、競技エージェントが書き残した判断の記録を、用意したチェックリストと突き合わせて見直します。1回約22分。判明している項目は「応答の遅延を固定にする形と、届くリクエストのレートを見て調整する形を、両方比べたか」で、ここから当日最高の629,638点が出ました。チェックリストの全体は非公開です。' },
+    hookEnd: { title: '17:20の終盤hook', status: '判明', key: 'known', body: '終了40分前に、終盤の確認へ切り替えさせます。全台の再起動を2通りの順序で確かめ、ブラウザでログイン・投稿・閲覧を確認し、走行中に動きかねない自動更新を止めました。人の「そろそろ仕上げよう」の代わりです。' },
+    stopper: { title: '止める判定の道具', status: '判明', key: 'known', body: '最終スコアは最後の走行の点で決まります。それまでのスコアの一覧と残り時間から「あと何回走れるか」を出し、その回数で走り直した場合の期待値を閾値にして、超えたら止めます。17:41 の 625,857点が閾値 562,595点を超えたので止めました。ポッドキャストでは、点がぶれる原因としてネットワークやEBSのI/Oの一時的な上振れ（バースト）を挙げ、追試の点も意識していたと話しています。当日最高との差は4,000点弱でした。' }
+  };
+  const partEls = Array.from(document.querySelectorAll('.part'));
+  const detailTitle = $('#detailTitle');
+  const detailBody = $('#detailBody');
+  const detailChip = $('#detailChip');
+  function showPart(id) {
+    const p = PARTS[id];
+    if (!p) return;
+    partEls.forEach((el) => el.classList.toggle('selected', el.dataset.id === id));
+    detailTitle.textContent = p.title;
+    detailBody.textContent = p.body;
+    detailChip.textContent = p.status;
+    detailChip.dataset.status = p.key;
+  }
+  const FLOW = [
+    ['human', '8:53', '人がログインして、起動を頼む（当日最後の操作）'],
+    ['launcher', '8:53', '起動役が herdr に起動を依頼'],
+    ['precheck', '8:53〜', '鍵とAWSの上限を確かめ、10:00まで待つ'],
+    ['runner', '10:00', '実行スクリプトが競技エージェントを起動'],
+    ['conditions', '10:00', '1行の指示で CONDITIONS.md を読ませる'],
+    ['prompt', '10:00', '進め方と競技時間は基本の指示に追記済み（文面は非公開）'],
+    ['cron', '10:00〜', '15分ごとに様子を本人に報告（結果には触らない）'],
+    ['aws', '10:07', 'エージェントがサーバー4台を構築'],
+    ['servers', '10:10', '地域間の往復を実測し、以降デプロイを繰り返す'],
+    ['portal', '10:19', 'ベンチを実行。最初のスコアは4,173点'],
+    ['measure', '10:35', '計測から「PostgreSQLをやめる」と決める'],
+    ['agent', '11:22', '書き直して、開始82分で50万点'],
+    ['stopHook', '終日', '手を止めかけるたび、残り時間を添えて「続けて」'],
+    ['hookStall', '14:02', '30分伸びず、hook が発動'],
+    ['auditor', '14:03', '監査役が見直し、15:49に当日最高629,638点'],
+    ['hookEnd', '17:20', '終盤の確認へ切り替え'],
+    ['stopper', '17:41', '期待値を超えたので、最後の1本を止める'],
+    ['alert', '終日', '人を呼ぶ道具は渡してあったが、一度も使われなかった'],
+    ['runner', '17:49', 'スクリプトがセッションを閉じる']
+  ];
+  const flowBtn = $('#flowBtn');
+  const flowCap = $('#flowCap');
+  let flowTimer = null;
+  let flowIdx = -1;
+  function setFlowCap(t, text) {
+    flowCap.textContent = '';
+    if (t) { const b = document.createElement('b'); b.textContent = t; flowCap.appendChild(b); }
+    flowCap.appendChild(document.createTextNode(text));
+  }
+  function stopFlow(msg) {
+    clearTimeout(flowTimer);
+    flowTimer = null;
+    flowBtn.setAttribute('aria-pressed', 'false');
+    flowBtn.textContent = '当日の流れで光らせる';
+    partEls.forEach((e) => e.classList.remove('lit'));
+    if (msg) setFlowCap('', msg);
+  }
+  function stepFlow() {
+    flowIdx += 1;
+    if (flowIdx >= FLOW.length) { stopFlow('ここまでが当日の流れです。部品を押すと説明が出ます。'); return; }
+    const [id, t, text] = FLOW[flowIdx];
+    partEls.forEach((e) => e.classList.toggle('lit', e.dataset.id === id));
+    showPart(id);
+    setFlowCap(t, text);
+    flowTimer = setTimeout(stepFlow, 2300);
+  }
+  flowBtn.addEventListener('click', () => {
+    if (flowTimer) { stopFlow('止めました。'); return; }
+    flowIdx = -1;
+    flowBtn.setAttribute('aria-pressed', 'true');
+    flowBtn.textContent = '止める';
+    stepFlow();
+  });
+  partEls.forEach((el) => el.addEventListener('click', () => {
+    if (flowTimer) stopFlow('');
+    showPart(el.dataset.id);
+    setFlowCap('', PARTS[el.dataset.id] ? PARTS[el.dataset.id].title + 'を表示中' : '');
+  }));
+  showPart('agent');
+
+  /* ---------- 2. timeline ---------- */
+  const T0 = 530, T1 = 1080, X0 = 120, X1 = 884;
+  const xOf = (t) => X0 + (t - T0) / (T1 - T0) * (X1 - X0);
+  const yOf = (v) => 160 - v / 700000 * 136;
+  const LANE_Y = { human: 196, ai: 244, sys: 292 };
+
+  const grid = $('#tlGrid');
+  [0, 200000, 400000, 600000].forEach((v) => {
+    svgEl('line', { class: 'grid-line', x1: X0, x2: X1, y1: yOf(v), y2: yOf(v) }, grid);
+    const t = svgEl('text', { class: 'axis-text', x: X0 - 8, y: yOf(v) + 4, 'text-anchor': 'end' }, grid);
+    t.textContent = v === 0 ? '0' : (v / 10000) + '万点';
+  });
+  [['human', '人'], ['ai', '競技エージェント'], ['sys', '見張り役']].forEach(([k, label]) => {
+    svgEl('rect', { class: 'lane-band', x: X0, y: LANE_Y[k] - 16, width: X1 - X0, height: 32, rx: 6 }, grid);
+    const t = svgEl('text', { class: 'lane-label ' + k, x: X0 - 8, y: LANE_Y[k] + 4, 'text-anchor': 'end' }, grid);
+    t.textContent = label;
+  });
+  for (let h = 9; h <= 18; h += 1) {
+    const x = xOf(h * 60);
+    svgEl('line', { class: 'grid-line', x1: x, x2: x, y1: 318, y2: 324 }, grid);
+    const t = svgEl('text', { class: 'axis-text', x: x, y: 342, 'text-anchor': 'middle' }, grid);
+    t.textContent = h + ':00';
+  }
+
+  const BEST = [[619, 4173], [626, 16647], [667, 139709], [674, 388921], [676, 483958], [682, 506241], [776, 589550], [807, 615485], [949, 629638]];
+  const OTHERS = [[626, 21952], [667, 111617], [684, 129664], [776, 261297], [918, 392092], [1020, 513306]];
+  const FINALS = [[1044, 584535], [1048, 549096], [1052, 548654], [1057, 556170], [1061, 625857]];
+  const FAILS = [657, 661, 664.2, 665, 665.5];
+  function stepPath(pts, endT) {
+    let d = '';
+    pts.forEach(([t, v], i) => {
+      const x = xOf(t).toFixed(1), y = yOf(v).toFixed(1);
+      d += i === 0 ? `M${x},${y}` : ` H${x} V${y}`;
+    });
+    return d + ` H${xOf(endT).toFixed(1)}`;
+  }
+  const scoreG = $('#tlScore');
+  svgEl('path', { class: 'others', d: stepPath(OTHERS, 1061) }, scoreG);
+  svgEl('path', { class: 'best', d: stepPath(BEST, 1080) }, scoreG);
+  FAILS.forEach((t) => {
+    const x = xOf(t), y = yOf(0);
+    svgEl('path', { class: 'fail', d: `M${x - 3},${y - 3} L${x + 3},${y + 3} M${x - 3},${y + 3} L${x + 3},${y - 3}` }, scoreG);
+  });
+  FINALS.forEach(([t, v], i) => {
+    svgEl('circle', { class: 'final-dot' + (i === FINALS.length - 1 ? ' win' : ''), cx: xOf(t), cy: yOf(v), r: 3.6 }, scoreG);
+  });
+  const lab1 = svgEl('text', { class: 'score-label ai', x: xOf(682) + 6, y: yOf(506241) - 8 }, scoreG);
+  lab1.textContent = '11:22 50万点';
+  const lab2 = svgEl('text', { class: 'score-label', x: xOf(1020) - 4, y: yOf(513306) + 16, 'text-anchor': 'end' }, scoreG);
+  lab2.textContent = '他チーム最高 51.3万（17:00）';
+  const lab3 = svgEl('text', { class: 'score-label', x: xOf(661), y: yOf(0) - 8, 'text-anchor': 'middle' }, scoreG);
+  lab3.textContent = '0点×5';
+
+  const lanesG = $('#tlLanes');
+  const LIFE = [[600, 670, '子どもとUno'], [685, 810, 'ランチ'], [840, 950, '広場でかくれんぼ'], [960, 1040, '習い事・ジム'], [1040, 1070, '夕食']];
+  const lifeEls = LIFE.map(([a, b, label]) => {
+    const g = svgEl('g', { class: 'life ev' }, lanesG);
+    svgEl('rect', { x: xOf(a), y: LANE_Y.human - 11, width: xOf(b) - xOf(a), height: 22, rx: 5 }, g);
+    const t = svgEl('text', { x: (xOf(a) + xOf(b)) / 2, y: LANE_Y.human + 4, 'text-anchor': 'middle' }, g);
+    t.textContent = label;
+    return { g, t: a };
+  });
+  const AUD = [[843, 865], [991, 1013]];
+  const audEls = AUD.map(([a, b]) => {
+    const g = svgEl('g', { class: 'aud ev' }, lanesG);
+    svgEl('rect', { x: xOf(a), y: LANE_Y.sys - 11, width: xOf(b) - xOf(a), height: 22, rx: 5 }, g);
+    const t = svgEl('text', { x: xOf(b) + 4, y: LANE_Y.sys + 4, 'text-anchor': 'start' }, g);
+    t.textContent = '監査役';
+    return { g, t: a };
+  });
+
+  const EVENTS = [
+    [533, 'human', '起動役のClaude Codeに起動を頼み、ログイン済みのブラウザを渡す。これが当日最後の操作。'],
+    [535, 'sys', 'herdrの別の枠で事前チェック。GitHubのSSH鍵とAWSの上限を確かめ、10:00まで待つ。'],
+    [600, 'sys', '実行スクリプトが競技エージェントを起動し、「CONDITIONS.mdを読んで、ISUCONを解いて」の1行を渡す。以後、15分ごとの見守りが様子を本人に報告。'],
+    [600, 'human', '家で子どもとUno。'],
+    [607, 'ai', 'CloudFormationで競技サーバー4台を構築。'],
+    [610, 'ai', '地域間の往復が約100ms、asia1とasia2の間だけ0.4msと実測。'],
+    [619, 'ai', '最初のスコア 4,173点。'],
+    [626, 'ai', 'DB設定と索引などで 16,647点。'],
+    [635, 'ai', '日ごとの利用者数から欧米が増えていないと気づき、「PostgreSQLをやめてメモリ化、書き込みはasia2に集約」と決める。'],
+    [655, 'ai', '16分でアプリを書き直して配備。'],
+    [660, 'ai', '0点が続く。数秒で終わる失敗走行を使い、署名の有効期限の許容範囲を約1分で実測。'],
+    [667, 'ai', '139,709点。欧米の利用者が増え始める。'],
+    [674, 'ai', '署名を事前計算した表と nginx の撤去で 388,921点。'],
+    [676, 'ai', '自分で入れたJPEGのデバッグ検査がCPUの約86%を使っていたと見つけ、外して 483,958点。'],
+    [676, 'human', '子どもを習い事へ送る。'],
+    [682, 'ai', 'GCとメモリの設定を見直し 506,241点。開始82分で50万点。'],
+    [685, 'human', 'ランチ。食べ終わって順位を見たら暫定1位。'],
+    [776, 'ai', '3地域の通知を2.5秒ずつずらし 589,550点。'],
+    [807, 'ai', 'ボトルネックはベンチマーカー側と判断。asiaへの応答を少し遅らせ、倍率1.5の欧米へ処理を回して 615,485点。'],
+    [840, 'human', '広場でかくれんぼ。'],
+    [842, 'sys', '最高点が30分伸びない。hook が監査役の起動を促す。'],
+    [843, 'sys', '監査役が、判断の記録をチェックリストと照合（約22分）。'],
+    [868, 'ai', '監査役の指摘を順に試す。大半は点が下がり不採用。'],
+    [949, 'ai', 'チェック項目「固定とレート調整を両方比べたか」から試した形で 629,638点（当日最高）。'],
+    [960, 'human', '子どもの習い事その2、そのあとジムでトレーニング。'],
+    [987, 'sys', '会話が約97万トークンに達し、圧縮して約2.3万トークンに。'],
+    [991, 'sys', '監査役が2回目の見直し（約22分）。'],
+    [1000, 'ai', 'いくつか試すが、走行ごとのぶれ（47.5万〜63.0万点）の方が大きいと記録。'],
+    [1040, 'sys', '終了40分前。hook で終盤の確認へ。全台を2通りの順序で再起動して確認、自動更新を停止。'],
+    [1040, 'human', '晩ごはんをつくる。'],
+    [1044, 'ai', '584,535点。閾値 590,535点に届かず、もう1回。'],
+    [1048, 'ai', '549,096点。閾値 582,577点に届かず、もう1回。'],
+    [1052, 'ai', '548,654点。閾値 580,408点に届かず、もう1回。'],
+    [1057, 'ai', '556,170点。閾値 570,219点に届かず、もう1回。'],
+    [1061, 'ai', '625,857点。閾値 562,595点を超えたので止める。これが最終スコア。'],
+    [1062, 'ai', '「これ以降ホストには触りません」と完了を報告。'],
+    [1070, 'sys', '17:49:59、実行スクリプトが /exit を送ってセッションを閉じる。']
+  ];
+  const evG = $('#tlEvents');
+  const markEls = [];
+  EVENTS.forEach(([t, lane]) => {
+    if (lane === 'human' && t !== 533) return;
+    if (lane === 'sys' && (t === 843 || t === 991)) return;
+    const x = xOf(t), y = LANE_Y[lane];
+    let el;
+    if (lane === 'sys') el = svgEl('path', { class: 'ev ev-sys', d: `M${x},${y - 7} L${x + 7},${y} L${x},${y + 7} L${x - 7},${y} Z` }, evG);
+    else if (lane === 'human') el = svgEl('path', { class: 'ev ev-human', d: `M${x},${y - 8} L${x + 8},${y} L${x},${y + 8} L${x - 8},${y} Z` }, evG);
+    else el = svgEl('circle', { class: 'ev ev-agent', cx: x, cy: y, r: 4.5 }, evG);
+    markEls.push({ el, t });
+  });
+  const inputLabel = svgEl('text', { class: 'life', x: xOf(533) + 12, y: LANE_Y.human + 4 }, evG);
+  inputLabel.setAttribute('style', 'fill: var(--human-ink); font-size: 11px;');
+  inputLabel.textContent = '起動を頼む';
+
+  const revealRect = $('#revealRect');
+  const playhead = $('#playhead');
+  const range = $('#timeRange');
+  const clock = $('#clock');
+  const cards = {
+    human: [$('#nowHuman'), $('#nowHumanT')],
+    ai: [$('#nowAi'), $('#nowAiT')],
+    sys: [$('#nowSys'), $('#nowSysT')]
+  };
+  function setTime(t) {
+    const x = xOf(t);
+    revealRect.setAttribute('width', x.toFixed(1));
+    playhead.setAttribute('x1', x.toFixed(1));
+    playhead.setAttribute('x2', x.toFixed(1));
+    markEls.forEach((m) => m.el.classList.toggle('future', m.t > t));
+    lifeEls.concat(audEls).forEach((m) => m.g.classList.toggle('future', m.t > t));
+    clock.textContent = fmt(t);
+    range.value = String(Math.round(t));
+    ['human', 'ai', 'sys'].forEach((lane) => {
+      let last = null;
+      EVENTS.forEach((e) => { if (e[1] === lane && e[0] <= t) last = e; });
+      const [whatEl, whenEl] = cards[lane];
+      if (last) { whenEl.textContent = fmt(last[0]); whatEl.textContent = last[2]; }
+      else { whenEl.textContent = ''; whatEl.textContent = 'まだ動きはありません。'; }
+    });
+  }
+  const playBtn = $('#playBtn');
+  let playRAF = null;
+  function stopPlay() {
+    cancelAnimationFrame(playRAF);
+    playRAF = null;
+    playBtn.setAttribute('aria-pressed', 'false');
+    playBtn.textContent = Number(range.value) >= T1 ? '最初から再生' : '続きを再生';
+  }
+  function play() {
+    if (playRAF) { stopPlay(); return; }
+    let from = Number(range.value);
+    if (from >= T1) from = T0;
+    const totalMs = 42000;
+    const msPerMin = totalMs / (T1 - T0);
+    let start = null;
+    playBtn.setAttribute('aria-pressed', 'true');
+    playBtn.textContent = '一時停止';
+    const frame = (ts) => {
+      if (start === null) start = ts;
+      const t = Math.min(T1, from + (ts - start) / msPerMin);
+      setTime(t);
+      if (t < T1) playRAF = requestAnimationFrame(frame);
+      else { playRAF = null; stopPlay(); }
+    };
+    playRAF = requestAnimationFrame(frame);
+  }
+  playBtn.addEventListener('click', play);
+  range.addEventListener('input', () => { if (playRAF) stopPlay(); setTime(Number(range.value)); });
+  setTime(T1);
+
+  /* ---------- 3. harness history ---------- */
+  const hist = $('#hist');
+  const histBtn = $('#histBtn');
+  function runHist() {
+    hist.classList.add('pre');
+    void hist.offsetHeight;
+    requestAnimationFrame(() => hist.classList.remove('pre'));
+  }
+  if (reduce || !('IntersectionObserver' in window)) {
+    histBtn.hidden = true;
+  } else {
+    hist.classList.add('pre');
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); requestAnimationFrame(() => hist.classList.remove('pre')); }
+    }, { threshold: 0.12 });
+    io.observe(hist);
+    histBtn.addEventListener('click', runHist);
+  }
+
+  /* ---------- 3. prep loop ---------- */
+  const prepDot = $('#prepDot');
+  if (!reduce) {
+    const lapMs = 6000;
+    let s = null;
+    const loop = (ts) => {
+      if (s === null) s = ts;
+      const a = (-45 + 360 * ((ts - s) % lapMs) / lapMs) * Math.PI / 180;
+      prepDot.setAttribute('cx', (200 + 125 * Math.cos(a)).toFixed(1));
+      prepDot.setAttribute('cy', (190 + 125 * Math.sin(a)).toFixed(1));
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }
+})();
+</script>
+
+</body></html>
