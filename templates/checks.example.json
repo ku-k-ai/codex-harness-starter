@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "checks": [],
+  "fingerprint_paths": [
+    "src",
+    "tests"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fingerprint_paths": ["src", "tests", ".harness/TASK.md", "AGENTS.md"],
+  "checks": [
+    {
+      "id": "merge-contract",
+      "argv": ["{python}", "-m", "unittest", "discover", "-s", "tests", "-v"],
+      "timeout_seconds": 30
+    }
+  ]
+}
